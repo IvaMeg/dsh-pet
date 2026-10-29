@@ -69,6 +69,8 @@
     "assets/sound",
     "assets/config.jsonc",
     "assets/logo.png",
+    "assets/logo-tray.png",
+    "assets/logo-tray-peak.png",
     "scripts/ensure-electron.mjs",
     "cordis.patch.yml"
   ],

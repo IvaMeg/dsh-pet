@@ -13,7 +13,7 @@
  *
  * @param platform - process.platform 的值。
  * @returns templateImage 图标是否按模板图处理；leftClickPopsMenu 左键单击是否需手动弹菜单；
- *   hideDock 是否隐藏 Dock 图标（macOS 专有）。
+ *   hideDock 是否隐藏 Dock 图标（macOS 专有）；tintable 图标能否改色（见下）。
  */
 function trayPlatform(platform) {
   const mac = platform === 'darwin';
@@ -21,6 +21,9 @@ function trayPlatform(platform) {
     templateImage: mac,
     leftClickPopsMenu: platform === 'win32',
     hideDock: mac,
+    // 模板图是「纯形状的 alpha 遮罩」：系统按菜单栏深浅色自己上色，送进去的彩色图只会被当成形状，
+    // 于是峰谷变色的橙永远显示不出来——macOS 上直接不提供这个开关，免得勾了却没反应。
+    tintable: !mac,
   };
 }
 

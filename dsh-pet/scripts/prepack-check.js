@@ -74,6 +74,7 @@ const required = [
   'runtime/electron-helper/taskbar-watchdog.js', // 桌面模式任务栏看门狗判定（main.js require，缺了会启动即崩）
   'runtime/electron-helper/dpi-linearization.js', // 桌面模式 DPI 线性化判定与换算（main.js require，缺了会启动即崩）
   'runtime/electron-helper/tray-platform.js', // 桌面模式托盘平台差异判定（main.js require，缺了会启动即崩）
+  'runtime/electron-helper/tray-tint.js', // 托盘峰谷配色判定（main/tray.js require，缺了托盘即不可见）
   'runtime/electron-helper/desktop-geometry.js', // 活动边界与菜单工作区分离
   'runtime/electron-helper/preload.js', // 桌面模式 preload 桥
   'runtime/electron-helper/renderer.js', // 桌面模式渲染端（宠物本体）

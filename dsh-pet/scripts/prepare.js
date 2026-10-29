@@ -61,6 +61,10 @@ const keep = [
   'assets/config.jsonc',
   // 插件图标：package.json 顶层 icon 指向这张图；缺图时读取方 dsh-app-boot 的 iconOf 会抛错、退回默认插画。
   'assets/logo.png',
+  // 托盘图标（谷/峰两张头部特写）：桌面 helper 的托盘只读这两张，缺图即托盘不可见（应用图标仍用上面那张）。
+  // 同 memes：本数组覆盖 files，必须加在这里，只在 package.json 里加一行无效。
+  'assets/logo-tray.png',
+  'assets/logo-tray-peak.png',
   'scripts/ensure-electron.mjs',
   'cordis.patch.yml',
 ];
