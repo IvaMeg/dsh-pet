@@ -22,6 +22,11 @@ const helper = '../../runtime/electron-helper/';
 const tint = require(helper + 'tray-tint.js') as TrayTint;
 const { createTray } = require(helper + 'main/tray.js') as { createTray: (deps: unknown) => TrayApi };
 
+/** 取最后一个元素：目标环境是 ES2020，用不了 Array.prototype.at。 */
+function last<T>(list: T[]): T | undefined {
+  return list[list.length - 1];
+}
+
 interface TrayTint {
   ICON_IDLE: string;
   ICON_PEAK: string;
@@ -246,7 +251,7 @@ describe('createTray', () => {
     const post = harness.posts.find((entry) => entry.url.endsWith('/pet-display'));
     assert.ok(post, '没有发出 pet-display 请求');
     assert.deepEqual(JSON.parse(post.body ?? '{}'), { id: 'a', display: 'web' });
-    assert.equal(tray.menus.at(-1)?.item('蓝毛').checked, false, '切走后这一勾要立刻消失，不用等宿主重启');
+    assert.equal(last(tray.menus)?.item('蓝毛').checked, false, '切走后这一勾要立刻消失，不用等宿主重启');
   });
 
   test('trayEnabled === false：不建托盘', async () => {
@@ -276,11 +281,11 @@ describe('createTray · 峰谷变色开关', () => {
     const tray = trayOf(built);
     tray.menus[0].item('峰谷变色').click?.();
 
-    assert.equal(tray.images.at(-1), tint.ICON_IDLE, '关掉开关后必须是原图，哪怕现在是峰时');
-    assert.equal(tray.tooltips.at(-1), 'dsh-pet 桌面宠物', '关掉后不该再提示时段');
+    assert.equal(last(tray.images), tint.ICON_IDLE, '关掉开关后必须是原图，哪怕现在是峰时');
+    assert.equal(last(tray.tooltips), 'dsh-pet 桌面宠物', '关掉后不该再提示时段');
     assert.equal(tray.menus.length, 2, '必须重设一次菜单，否则界面上那一勾不刷新');
-    assert.equal(tray.menus.at(-1)?.item('峰谷变色').checked, false, '新菜单里这一项必须是未勾状态');
-    assert.equal(tray.menus.at(-1)?.item('蓝毛').checked, true, '重设菜单不能弄丢宠物条目本来的勾');
+    assert.equal(last(tray.menus)?.item('峰谷变色').checked, false, '新菜单里这一项必须是未勾状态');
+    assert.equal(last(tray.menus)?.item('蓝毛').checked, true, '重设菜单不能弄丢宠物条目本来的勾');
     assert.deepEqual(harness.readState(), { tintEnabled: false }, '开关必须落盘，跨重启记住');
   });
 
@@ -301,9 +306,9 @@ describe('createTray · 峰谷变色开关', () => {
     const harness = makeHarness({ state: JSON.stringify({ tintEnabled: false }) });
     const { tray: built } = await harness.start();
     const tray = trayOf(built);
-    tray.menus.at(-1)?.item('峰谷变色').click?.();
-    assert.equal(tray.menus.at(-1)?.item('峰谷变色').checked, true, '新菜单里这一项要变成已勾');
-    assert.equal(tray.images.at(-1), expectedIcon(true), '翻回开启后按当前时段选图');
+    last(tray.menus)?.item('峰谷变色').click?.();
+    assert.equal(last(tray.menus)?.item('峰谷变色').checked, true, '新菜单里这一项要变成已勾');
+    assert.equal(last(tray.images), expectedIcon(true), '翻回开启后按当前时段选图');
     assert.deepEqual(harness.readState(), { tintEnabled: true });
   });
 
